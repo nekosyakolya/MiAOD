@@ -1,8 +1,11 @@
 #include "Bohr.h"
 #include "Text.h"
+#include <iostream>
 
-void Check(int v, int i, std::wofstream &output, CBohr &bohr, const CText &text) {
-	for (int u = v; u != 0; u = bohr.GetGoodSuffLink(u)) {
+void Check(int v, int i, std::wofstream &output, CBohr &bohr, const CText &text)
+{
+	for (int u = v; u != 0; u = bohr.GetGoodSuffLink(u))
+	{
 		if (bohr.IsPattern(u))
 		{
 			std::pair<int, int> position = text.GetPosition(i - bohr.GetPatternLength(u) + 1);
@@ -11,36 +14,55 @@ void Check(int v, int i, std::wofstream &output, CBohr &bohr, const CText &text)
 	}
 }
 
-void FindAllPositions(const CText &text, CBohr &bohr) {
-	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>());
-	std::wofstream output("out.txt");
-	output.imbue(utf8_locale);
+void FindAllPositions(const CText &text, CBohr &bohr)
+{
+	std::wofstream output("OUTPUT.TXT");
+	output.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>()));
 
+	const std::wstring& str = text.GetValue();
 	int u = 0;
-	std::wstring s = text.GetValue();
-	for (int i = 0; i < s.length(); i++) {
-		u = bohr.GetAutoMove(u, (s[i]));
+
+	for (int i = 0; i < str.length(); i++)
+	{
+		wchar_t ch = std::tolower(str[i], std::locale::empty());
+		u = bohr.GetAutoMove(u, ch);
 		Check(u, i + 1, output, bohr, text);
 	}
 }
 
-int main()
+void runApp()
 {
 	CBohr bohr;
+	std::wifstream input("INPUT.TXT");
+	input.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 
-	std::wifstream inputData("input.txt");
+	std::wstring line;
+	std::getline(input, line);
+	unsigned count = std::stoi(line);
 
-	std::wstring strCount;
-	std::getline(inputData, strCount);
-	int count = std::stoi(strCount);
-
-	for (int i = 0; i != count; i++)
+	for (unsigned i = 0; i != count; ++i)
 	{
-		std::wstring pattern;
-		std::getline(inputData, pattern);
-		bohr.Add(pattern);
+		getline(input, line);
+		bohr.Add(line);
 	}
 
-	CText text("test.txt");
+	std::wstring fileName;
+	std::getline(input, fileName);
+
+	CText text(fileName);
 	FindAllPositions(text, bohr);
+}
+
+int main()
+{
+	try
+	{
+		runApp();
+		std::cout << ":)" << std::endl;
+	}
+	catch (...)
+	{
+		std::cerr << ":(" << std::endl;
+		return 1;
+	}
 }

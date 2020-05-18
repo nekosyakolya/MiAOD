@@ -8,9 +8,10 @@
 class CText
 {
 public:
-		CText(const std::string & fileName);
-		std::wstring GetValue() const;
-		std::pair<int, int> GetPosition(int pos) const;
+	CText(const std::wstring& fileName);
+	std::pair<int, int> GetPosition(int pos) const;
+	const std::wstring& GetValue() const;
+
 private:
 	std::wstring m_value;
 	std::vector<std::pair<int, int>> m_positionTable;

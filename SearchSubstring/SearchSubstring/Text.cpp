@@ -1,28 +1,25 @@
 #include "Text.h"
 
-CText::CText(const std::string & fileName)
+CText::CText(const std::wstring& fileName)
 {
-	int pos = 1;
-	std::wstring s;
 	std::wifstream input(fileName);
-	while (std::getline(input, s))
+	input.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+	std::wstring line;
+	int pos = 1;
+
+	while (std::getline(input, line))
 	{
 		if (!m_value.empty())
 		{
 			m_value += ' ';
 		}
 
-		m_value += s;
+		m_value += line;
 
-		int secondPos = pos + s.length();
+		int secondPos = pos + line.length();
 		m_positionTable.push_back(std::make_pair(pos, secondPos));
 		pos = secondPos + 1;
 	}
-}
-
-std::wstring CText::GetValue() const
-{
-	return m_value;
 }
 
 std::pair<int, int> CText::GetPosition(int pos) const
@@ -40,4 +37,9 @@ std::pair<int, int> CText::GetPosition(int pos) const
 	}
 
 	return std::make_pair(x, y);
+}
+
+const std::wstring& CText::GetValue() const
+{
+	return m_value;
 }
