@@ -56,7 +56,7 @@ void RunApp()
 	for (unsigned i = 0; i != count; ++i)
 	{
 		getline(input, line);
-		if (line.empty() || line.length() > 30)
+		if (line.empty())
 		{
 			throw std::invalid_argument("Incorrect input size of line\n");
 		}
