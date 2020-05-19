@@ -1,7 +1,7 @@
 #include "Bohr.h"
 CBohr::CBohr()
 {
-	m_bohr.push_back(MakeBohrItem(0, '$'));
+	m_bohr.push_back(MakeBohrItem(0, 8416));//unicode symbol number
 }
 
 void CBohr::Add(const std::wstring &s)
@@ -18,7 +18,7 @@ void CBohr::Add(const std::wstring &s)
 		num = m_bohr[num].nextItems.find(ch)->second;
 	}
 	m_bohr[num].isPattern = true;
-	m_patterns.push_back(s);
+	m_patterns.push_back(std::make_pair(s, false));
 	m_bohr[num].patternNumber = m_patterns.size() - 1;
 }
 
@@ -67,17 +67,37 @@ int CBohr::GetGoodSuffLink(int v)
 	return m_bohr[v].goodSuffLink;
 }
 
+void CBohr::SetFoundPattern(int u)
+{
+	m_patterns[u].second = true;
+}
+
 int CBohr::GetPatternLength(int u) const
 {
-	return m_patterns[m_bohr[u].patternNumber].length();
+	return m_patterns[u].first.length();
 }
 
 std::wstring CBohr::GetPattern(int u) const
 {
-	return m_patterns[m_bohr[u].patternNumber];
+	return m_patterns[u].first;
+}
+
+int CBohr::GetPatternsSize() const
+{
+	return m_patterns.size();
+}
+
+bool CBohr::IsFoundPattern(int i) const
+{
+	return m_patterns[i].second;
 }
 
 bool CBohr::IsPattern(int u) const
 {
 	return m_bohr[u].isPattern;
+}
+
+int CBohr::GetPatternNumber(int u) const
+{
+	return m_bohr[u].patternNumber;
 }

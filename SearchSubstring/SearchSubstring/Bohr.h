@@ -16,10 +16,15 @@ public:
 	int GetAutoMove(int v, wchar_t ch);
 	int GetGoodSuffLink(int v);
 
-	int GetPatternLength(int u) const;
 	std::wstring GetPattern(int u) const;
-
+	int GetPatternLength(int u) const;
 	bool IsPattern(int u) const;
+	int GetPatternNumber(int u) const;
+
+	int GetPatternsSize() const;
+
+	void SetFoundPattern(int u);
+	bool IsFoundPattern(int i) const;
 
 private:
 	struct BohrItem
@@ -48,5 +53,5 @@ private:
 	int GetSuffLink(int v);
 
 	std::vector<BohrItem> m_bohr;
-	std::vector<std::wstring> m_patterns;
+	std::vector<std::pair<std::wstring, bool>> m_patterns;
 };

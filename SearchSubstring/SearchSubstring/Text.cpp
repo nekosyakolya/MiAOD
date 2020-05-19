@@ -9,14 +9,14 @@ CText::CText(const std::wstring& fileName)
 
 	while (std::getline(input, line))
 	{
-		if (!m_value.empty())
+
+		if (!line.empty())
 		{
-			m_value += ' ';
+			m_value += line;
 		}
 
-		m_value += line;
-
-		int secondPos = pos + line.length();
+		m_value += ' ';
+		int secondPos = m_value.length();
 		m_positionTable.push_back(std::make_pair(pos, secondPos));
 		pos = secondPos + 1;
 	}
